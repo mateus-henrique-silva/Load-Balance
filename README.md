@@ -1,4 +1,4 @@
-# LoadBalancer API
+# Load Balance API
 
 ## Dev
 
