@@ -3,6 +3,7 @@ package middleware
 import (
 	"fmt"
 	"net/http"
+	"net/http/httputil"
 	"net/url"
 	"strconv"
 	"sync"
@@ -32,12 +33,13 @@ func BalanceMiddleware(other http.HandlerFunc) http.HandlerFunc {
 		ur, _ = url.Parse("http://localhost:" + port)
 		v := entity.LoadBalancer{
 			Servers: []*entity.BackendServer{
-				&entity.BackendServer{
+				{
 					URL: ur,
 				},
 			},
 		}
-
+		proxy := httputil.NewSingleHostReverseProxy(v.Servers[0].URL)
+		proxy.ServeHTTP(w, r)
 		fmt.Println(size)
 	}
 }
