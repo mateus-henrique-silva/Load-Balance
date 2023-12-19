@@ -8,7 +8,7 @@ import (
 	"go.mod/entity"
 )
 
-func ReadRequest(w http.ResponseWriter, body io.Reader) {
+func ReadRequest(w http.ResponseWriter, body io.Reader) float64 {
 	v, err := io.ReadAll(body)
 	if err != nil {
 		SendError(w, err)
@@ -19,4 +19,5 @@ func ReadRequest(w http.ResponseWriter, body io.Reader) {
 		SizeRequest: size,
 		Time:        time.Now(),
 	})
+	return size
 }
