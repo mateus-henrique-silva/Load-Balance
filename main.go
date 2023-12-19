@@ -13,7 +13,7 @@ const (
 	port = ":6666"
 )
 
-func RouterMain() {
+func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", middleware.BalanceMiddleware(balance)).Methods("GET")
 	fmt.Println("O servidor esta escutando a porta...")
