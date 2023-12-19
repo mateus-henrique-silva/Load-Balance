@@ -1,0 +1,8 @@
+# air.toml
+root = "." # O diretório do seu projeto
+
+[build]
+cmd = "loadbalancer" # O nome do seu programa executável
+
+[[build.watch]]
+paths = ["**/*.go"] # Assista a todos os arquivos .go
