@@ -9,6 +9,6 @@ type BackendServer struct {
 
 // Estrutura para armazenar informações sobre o load balancer
 type LoadBalancer struct {
-	servers []*BackendServer
-	next    int
+	Servers []*BackendServer
+	Next    int
 }
