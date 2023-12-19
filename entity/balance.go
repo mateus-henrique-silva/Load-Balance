@@ -3,12 +3,12 @@ package entity
 import "net/url"
 
 // Estrutura para armazenar informações sobre os servidores backend
-type backendServer struct {
+type BackendServer struct {
 	URL *url.URL
 }
 
 // Estrutura para armazenar informações sobre o load balancer
-type loadBalancer struct {
-	servers []*backendServer
+type LoadBalancer struct {
+	servers []*BackendServer
 	next    int
 }
