@@ -3,32 +3,37 @@ package middleware
 import (
 	"fmt"
 	"net/http"
+	"net/http/httputil"
 	"net/url"
-	"strconv"
 	"sync"
 
 	"go.mod/entity"
 	"go.mod/libs/rest"
+	"go.mod/manager"
 )
 
-var requestCount int
-var mu sync.Mutex
+var (
+	port         = ":6666"
+	serverPorts  = []int{6667, 6668, 6669}
+	currentIndex = 0
+	mu           sync.Mutex
+	requestCount int
+)
 
 func BalanceMiddleware(other http.HandlerFunc) http.HandlerFunc {
 	fmt.Println("teste 01")
 	mu.Lock()
+	defer mu.Unlock()
 	requestCount++
-	mu.Unlock()
+
 	fmt.Println("teste 02")
 	return func(w http.ResponseWriter, r *http.Request) {
 		size := rest.ReadRequest(w, r.Body)
 		var ur *url.URL
-		var port string
-		if size > 5 {
-			for i := 0; i <= requestCount; i++ {
-				n := 6666 + 1
-				strconv.Itoa(n)
-			}
+		port := "6667"
+		if size > 5 && requestCount > 1 {
+			port = manager.GetNextPort()
+
 		}
 
 		ur, _ = url.Parse("http://localhost:" + port)
@@ -42,9 +47,15 @@ func BalanceMiddleware(other http.HandlerFunc) http.HandlerFunc {
 		fmt.Println(size)
 		fmt.Println(v)
 		fmt.Println(port)
+		fmt.Println(v.Servers[0].URL)
+		fmt.Println(requestCount)
 		// Aqui estou resolvendo o bug.
-		// proxy := httputil.NewSingleHostReverseProxy(v.Servers[0].URL)
-		// proxy.ServeHTTP(w, r)
+		if ok := manager.IsServerHealthy(v.Servers[0].URL.String()); ok {
+			proxy := httputil.NewSingleHostReverseProxy(v.Servers[0].URL)
+			proxy.ServeHTTP(w, r)
+		} else {
+			http.Error(w, "Servidor indisponível", http.StatusServiceUnavailable)
+		}
 
 	}
 }

@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"go.mod/libs/rest"
 	"go.mod/middleware"
 )
 
@@ -20,8 +20,7 @@ func main() {
 	fmt.Println(port)
 	err := http.ListenAndServe(port, r)
 	if err != nil {
-		rest.ReturnStringError(err)
-		return
+		log.Fatal(err)
 	}
 
 }

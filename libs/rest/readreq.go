@@ -3,9 +3,6 @@ package rest
 import (
 	"io"
 	"net/http"
-	"time"
-
-	"go.mod/entity"
 )
 
 func ReadRequest(w http.ResponseWriter, body io.Reader) float64 {
@@ -15,9 +12,9 @@ func ReadRequest(w http.ResponseWriter, body io.Reader) float64 {
 	}
 	size := float64(len(v) / 1024)
 
-	Send(w, entity.Size{
-		SizeRequest: size,
-		Time:        time.Now(),
-	})
+	// Send(w, entity.Size{
+	// 	SizeRequest: size,
+	// 	Time:        time.Now(),
+	// })
 	return size
 }
